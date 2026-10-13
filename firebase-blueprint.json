@@ -1,0 +1,208 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role-based access control",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the user in Thai or English",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "School institutional email address",
+          "format": "email",
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "description": "Role determining permissions",
+          "enum": ["student", "teacher", "admin"]
+        },
+        "department": {
+          "type": "string",
+          "description": "Academic department or grade class",
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact or internal extension number",
+          "maxLength": 40
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of account registration"
+        }
+      },
+      "required": ["uid", "name", "email", "role"]
+    },
+    "Room": {
+      "title": "Room",
+      "description": "School facility, classroom, or auditorium resource",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique room identifier",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Room or facility name",
+          "maxLength": 100
+        },
+        "type": {
+          "type": "string",
+          "description": "Room category type",
+          "enum": ["computer", "meeting", "hall", "science", "smart"]
+        },
+        "typeName": {
+          "type": "string",
+          "description": "Category display name in Thai",
+          "maxLength": 60
+        },
+        "capacity": {
+          "type": "number",
+          "description": "Maximum seating capacity"
+        },
+        "building": {
+          "type": "string",
+          "description": "Building and floor name",
+          "maxLength": 100
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Display image URL",
+          "maxLength": 600
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Whether room is active and open for booking"
+        },
+        "equipment": {
+          "type": "array",
+          "description": "Equipment available in the room"
+        }
+      },
+      "required": ["name", "type", "capacity", "isActive"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Reservation record for a school room",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Booking reference code",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Auth UID of the requester",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userName": {
+          "type": "string",
+          "description": "Requester name",
+          "maxLength": 100
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "Requester email",
+          "format": "email",
+          "maxLength": 120
+        },
+        "userRole": {
+          "type": "string",
+          "description": "Requester role at booking time",
+          "enum": ["student", "teacher", "admin"]
+        },
+        "roomId": {
+          "type": "string",
+          "description": "ID of the reserved room",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "roomName": {
+          "type": "string",
+          "description": "Name of the room",
+          "maxLength": 100
+        },
+        "roomBuilding": {
+          "type": "string",
+          "description": "Building location of the room",
+          "maxLength": 100
+        },
+        "date": {
+          "type": "string",
+          "description": "Reservation date in YYYY-MM-DD format",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Start time in HH:mm format",
+          "pattern": "^\\d{2}:\\d{2}$"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "End time in HH:mm format",
+          "pattern": "^\\d{2}:\\d{2}$"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Booking objective and details",
+          "maxLength": 500
+        },
+        "participants": {
+          "type": "number",
+          "description": "Expected number of attendees"
+        },
+        "equipment": {
+          "type": "array",
+          "description": "Borrowed accessories (microphones, extension cords, etc.)"
+        },
+        "status": {
+          "type": "string",
+          "description": "Approval workflow status",
+          "enum": ["pending", "approved", "rejected", "cancelled"]
+        },
+        "rejectReason": {
+          "type": "string",
+          "description": "Reason provided if booking was rejected",
+          "maxLength": 300
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["userId", "roomId", "date", "startTime", "endTime", "purpose", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "User profiles with role assignment"
+    },
+    "/rooms/{roomId}": {
+      "schema": {
+        "$ref": "#/entities/Room"
+      },
+      "description": "School facility room definitions"
+    },
+    "/bookings/{bookingId}": {
+      "schema": {
+        "$ref": "#/entities/Booking"
+      },
+      "description": "Room reservations and approval status"
+    }
+  }
+}

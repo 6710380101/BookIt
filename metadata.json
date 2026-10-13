@@ -1,0 +1,8 @@
+{
+  "name": "BookIt School",
+  "description": "ระบบจองห้องและอุปกรณ์การเรียนรู้ออนไลน์ สะดวก รวดเร็ว ตรวจสอบได้ทันที",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
